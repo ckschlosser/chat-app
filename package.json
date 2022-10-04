@@ -33,6 +33,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@supabase/supabase-js": "^1.35.7"
+		"@fortawesome/free-brands-svg-icons": "^6.2.0",
+		"@fortawesome/free-solid-svg-icons": "^6.2.0",
+		"@supabase/supabase-js": "^1.35.7",
+		"svelte-fa": "^3.0.3"
 	}
 }
