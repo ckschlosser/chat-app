@@ -9,11 +9,16 @@
 	supabase.auth.onAuthStateChange((_, session) => {
 		user.set(session.user);
 	});
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+
+	console.log('DATA', data);
 </script>
 
-<div class="container" style="padding: 50px 0 100px 0;">
+<div>
 	{#if $user}
-		<Chat />
+		<Chat channels={data.channels} />
 	{:else}
 		<Auth />
 	{/if}
