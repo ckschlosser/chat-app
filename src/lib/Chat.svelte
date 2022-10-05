@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { supabase } from '../lib/supabaseClient';
+	import { supabase } from './supabaseClient';
 	import NewChannelForm from '../lib/components/NewChannelForm.svelte'
 
 	export let channels: any;
@@ -14,13 +14,13 @@
 			createChannel = null;
 		};
 
-		let addChannel = (event) => {
-			let newChannel = {
-			id: Math.random().toString(),
-			name: event.detail.name,
-			description: event.detail.description,
-			};
-			channels = [newChannel, ...channels];
+		let addChannel = async (event) => {
+			// Supabase - insert statement
+			const { data, error } = await supabase
+				.from('channels')
+				.insert([
+					{ name: event.detail.name, description: event.detail.description },
+				])
 
 			createChannel = false;
   		};
