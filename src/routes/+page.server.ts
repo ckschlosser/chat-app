@@ -5,7 +5,15 @@ import { supabase } from '../lib/supabaseClient';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }: any) {
-	let { data: channels, error } = await supabase.from('channels').select('*');
+	let { data: channels, error } = await supabase.from('channels').select(`
+			id, 
+			created_at,
+			name,
+			description,
+			messages (
+				*
+			)
+		`);
 
 	if (!error) {
 		return {
