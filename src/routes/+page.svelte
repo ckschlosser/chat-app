@@ -4,6 +4,7 @@
 	import Auth from '../lib/Auth.svelte';
 	import Chat from '../lib/Chat.svelte';
 	import { invalidate } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let profile;
 
@@ -15,37 +16,38 @@
 
 	const getUserProfile = async (user) => {
 		let { data: profile, error } = await supabase
-  			.from('profiles')
+			.from('profiles')
 			.select('*')
 			.eq('id', user.id)
-			.single()
+			.single();
 
-		if(!error) {
+		if (!error) {
 			console.log('User Profile: ', profile);
 			$userProfile = profile;
 		}
-	}
+	};
 
-	if($user) {
+	if ($user) {
 		console.log('USER:', $user);
 		getUserProfile($user);
-
 	}
 
 	/** @type {import('./$types').PageData} */
 	export let data;
 
 	const pageRefresh = async () => {
-    	await invalidate('channel:update');
-  	}
+		if (browser) {
+			await invalidate('channel:update');
+		}
+	};
 
 	const channel_subscription = supabase
-	.from('channels')
-	.on('INSERT', (data) => {
-		console.log('REALTIME DATA:', data)
-		pageRefresh()
-	})
-	.subscribe()
+		.from('channels')
+		.on('INSERT', (data) => {
+			console.log('REALTIME DATA:', data);
+			pageRefresh();
+		})
+		.subscribe();
 
 	console.log('DATA', data);
 </script>

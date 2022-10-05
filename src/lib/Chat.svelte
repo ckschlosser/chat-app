@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { supabase } from './supabaseClient';
-	import NewChannelForm from '../lib/components/NewChannelForm.svelte'
+	import NewChannelForm from '../lib/components/NewChannelForm.svelte';
 	import { userProfile } from '../lib/sessionStore';
+	import Messages from './components/Messages.svelte';
 
 	export let channels: any;
 
@@ -17,13 +18,16 @@
 		createChannel = null;
 	};
 
-		let addChannel = async (event) => {
-			// Supabase - insert statement
-			const { data, error } = await supabase
-				.from('channels')
-				.insert([
-					{ name: event.detail.name, description: event.detail.description },
-				])
+	let addChannel = async (event) => {
+		// Supabase - insert statement
+		const { data, error } = await supabase
+			.from('channels')
+			.insert([{ name: event.detail.name, description: event.detail.description }]);
+
+		if (!error) {
+			createChannel = false;
+		}
+	};
 
 	const channelSelected = (channel) => {
 		selected_channel = channel;
