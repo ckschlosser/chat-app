@@ -1,7 +1,29 @@
 <script lang="ts">
 	import { supabase } from '../lib/supabaseClient';
+	import NewChannelForm from '../lib/components/NewChannelForm.svelte'
 
 	export let channels: any;
+
+	let createChannel = false;
+
+		let showForm = () => {
+			createChannel = true;
+		};
+
+		let cancelChannel = () => {
+			createChannel = null;
+		};
+
+		let addChannel = (event) => {
+			let newChannel = {
+			id: Math.random().toString(),
+			name: event.detail.name,
+			description: event.detail.description,
+			};
+			channels = [newChannel, ...channels];
+
+			createChannel = false;
+  		};
 
 	console.log('Channels', channels);
 	/*const getChannels = async function () {
@@ -127,12 +149,6 @@
 								class="rounded-md px-3 py-2 text-sm font-medium text-indigo-200 hover:text-white"
 								aria-current="page">Dashboard</a
 							>
-
-							<a
-								href="#"
-								class="rounded-md px-3 py-2 text-sm font-medium text-indigo-200 hover:text-white"
-								>Domains</a
-							>
 						</div>
 						<!-- Profile dropdown -->
 						<div class="relative ml-4 flex-shrink-0">
@@ -163,14 +179,14 @@
                   From: "transform opacity-100 scale-100"
                   To: "transform opacity-0 scale-95"
               -->
-							<div
+							<!-- <div
 								class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 								role="menu"
 								aria-orientation="vertical"
 								aria-labelledby="user-menu-button"
 								tabindex="-1"
 							>
-								<!-- Active: "bg-gray-100", Not Active: "" -->
+
 								<a
 									href="#"
 									class="block px-4 py-2 text-sm text-gray-700"
@@ -194,7 +210,7 @@
 									tabindex="-1"
 									id="user-menu-item-2">Sign out</a
 								>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -285,11 +301,14 @@
 								</div>
 								<!-- Action buttons -->
 								<div class="flex flex-col sm:flex-row xl:flex-col">
-									<button
-										type="button"
-										class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 xl:w-full"
-										>New Channel</button
-									>
+									<button class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 xl:w-full"
+											on:click={showForm}>New Channel</button>
+										{#if createChannel}
+										<NewChannelForm
+											on:save={addChannel}
+											on:cancel={cancelChannel}
+										/>
+										{/if}
 								</div>
 							</div>
 							<!-- Meta info -->
@@ -374,8 +393,7 @@
 								aria-labelledby="sort-menu-button"
 								tabindex="-1"
 							>
-								<div class="py-1" role="none">
-									<!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+								<!-- <div class="py-1" role="none">
 									<a
 										href="#"
 										class="text-gray-700 block px-4 py-2 text-sm"
@@ -397,7 +415,7 @@
 										tabindex="-1"
 										id="sort-menu-item-2">Date created</a
 									>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -438,7 +456,7 @@
 										/>
 									</svg>
 									<span class="truncate text-sm font-medium text-gray-500 group-hover:text-gray-900"
-										>debbielewis/workcation</span
+										>clintonSchlosser/workcation</span
 									>
 								</a>
 							</div>
