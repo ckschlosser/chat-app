@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { supabase } from './supabaseClient';
-	import NewChannelForm from '../lib/components/NewChannelForm.svelte';
-	import Channel from './components/Channel.svelte';
-	import Messages from './components/Messages.svelte';
+	import NewChannelForm from '../lib/components/NewChannelForm.svelte'
+	import { userProfile } from '../lib/sessionStore';
 
 	export let channels: any;
 
@@ -18,16 +17,13 @@
 		createChannel = null;
 	};
 
-	let addChannel = (event) => {
-		let newChannel = {
-			id: Math.random().toString(),
-			name: event.detail.name,
-			description: event.detail.description
-		};
-		channels = [newChannel, ...channels];
-		createChannel = false;
-		console.log(channels);
-	};
+		let addChannel = async (event) => {
+			// Supabase - insert statement
+			const { data, error } = await supabase
+				.from('channels')
+				.insert([
+					{ name: event.detail.name, description: event.detail.description },
+				])
 
 	const channelSelected = (channel) => {
 		selected_channel = channel;
@@ -286,7 +282,9 @@
 										/>
 									</div>
 									<div class="space-y-1">
-										<div class="text-sm font-medium text-gray-900">Debbie Lewis</div>
+										<div class="text-sm font-medium text-gray-900">
+											{#if $userProfile}{$userProfile.name}{/if}
+										</div>
 										<a href="#" class="group flex items-center space-x-2.5">
 											<svg
 												class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
@@ -300,9 +298,11 @@
 													clip-rule="evenodd"
 												/>
 											</svg>
-											<span class="text-sm font-medium text-gray-500 group-hover:text-gray-900"
-												>debbielewis</span
-											>
+											{#if $userProfile.github_id}
+												<span class="text-sm font-medium text-gray-500 group-hover:text-gray-900"
+													>{$userProfile.github_id}</span
+												>
+											{/if}
 										</a>
 									</div>
 								</div>

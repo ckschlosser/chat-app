@@ -1,8 +1,11 @@
 <script>
-	import { user } from '../lib/sessionStore';
+	import { user, userProfile } from '../lib/sessionStore';
 	import { supabase } from '../lib/supabaseClient';
 	import Auth from '../lib/Auth.svelte';
 	import Chat from '../lib/Chat.svelte';
+	import { invalidate } from '$app/navigation';
+
+	export let profile;
 
 	user.set(supabase.auth.user());
 
@@ -10,8 +13,39 @@
 		user.set(session.user);
 	});
 
+	const getUserProfile = async (user) => {
+		let { data: profile, error } = await supabase
+  			.from('profiles')
+			.select('*')
+			.eq('id', user.id)
+			.single()
+
+		if(!error) {
+			console.log('User Profile: ', profile);
+			$userProfile = profile;
+		}
+	}
+
+	if($user) {
+		console.log('USER:', $user);
+		getUserProfile($user);
+
+	}
+
 	/** @type {import('./$types').PageData} */
 	export let data;
+
+	const pageRefresh = async () => {
+    	await invalidate('channel:update');
+  	}
+
+	const channel_subscription = supabase
+	.from('channels')
+	.on('INSERT', (data) => {
+		console.log('REALTIME DATA:', data)
+		pageRefresh()
+	})
+	.subscribe()
 
 	console.log('DATA', data);
 </script>
