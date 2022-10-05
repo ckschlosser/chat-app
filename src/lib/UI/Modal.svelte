@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from "svelte";
     import Button from "./Button.svelte"
-    export let name;
+    export let title;
     const dispatch = createEventDispatcher();
 
     let closeModel = () => {
@@ -11,7 +11,7 @@
 
   <div class="modal-backdrop fixed top-0 left-0 w-full h-full z-10">
     <div class="modal">
-      <h1 class="p-4 m-0 border-b-2 border-blueMain text-2xl ">{name}</h1>
+      <h1 class="p-4 m-0 border-b-2 border-blueMain text-2xl ">{title}</h1>
       <div class="p-4">
         <slot />
       </div>
