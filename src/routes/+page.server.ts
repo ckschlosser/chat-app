@@ -4,9 +4,7 @@ import { user } from '../lib/sessionStore';
 import { supabase } from '../lib/supabaseClient';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ depends }: any) {
-	depends('channel:update');
-
+export async function load({ params }: any) {
 	let { data: channels, error } = await supabase.from('channels').select(`
 			id, 
 			created_at,
