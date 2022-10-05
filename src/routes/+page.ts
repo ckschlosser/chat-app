@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 import { user } from '../lib/sessionStore';
 import { supabase } from '../lib/supabaseClient';
 
-/** @type {import('./$types').PageServerLoad} */
+/** @type {import('./$types').PageLoad} */
 export async function load({ depends }: any) {
 	depends('channel:update');
 
